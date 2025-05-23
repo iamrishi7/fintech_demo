@@ -88,7 +88,7 @@ class FlowController extends Controller
         $payout->update([
             'status' => 'pending',
             'description' => "Transaction was successful",
-            'utr' => "",
+            'utr' => random_int(1000000000, 999999999999),
             'metadata' => ['TEST']
         ]);
 
