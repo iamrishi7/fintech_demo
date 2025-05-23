@@ -111,33 +111,10 @@ class FlowController extends Controller
 
             $class_name = Str::of($payout->provider . "_" . "controller")->studly();
             $class = __NAMESPACE__ . "\\" . $class_name;
-            $instance = new $class;
-            if (!class_exists($class)) {
-                abort(501, "Provider not supported.");
-            }
 
-            $transaction_request = $instance->updateTransaction($payout->reference_id, $payout);
-
-            if (!in_array($transaction_request['data']['status'], ['failed', 'success'])) {
-                abort(400, $transaction_request['data']['message']);
-            }
-
-            if (in_array($transaction_request['data']['transaction_status'], ['failed', 'reversed'])) {
-
-                $lock = $this->lockRecords($payout->user_id);
-                if (!$lock->get()) {
-                    abort(423, "Can't lock user account");
-                }
-                $payout->status = $transaction_request['data']['transaction_status'];
-                $payout->utr = $transaction_request['data']['utr'];
-                $payout->save();
-                TransactionController::reverseTransaction($payout->reference_id);
-                $lock->release();
-            } elseif ($transaction_request['data']['status'] == 'success') {
-                $payout->status = 'success';
-                $payout->utr = $transaction_request['data']['utr'];
-                $payout->save();
-            }
+            $payout->status = 'success';
+            // $payout->utr = $transaction_request['data']['utr'];
+            $payout->save();
 
             return new GeneralResource($payout);
         }, 2);
