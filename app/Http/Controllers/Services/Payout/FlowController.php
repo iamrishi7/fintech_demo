@@ -88,7 +88,7 @@ class FlowController extends Controller
         $payout->update([
             'status' => 'pending',
             'description' => "Transaction was successful",
-            'utr' => random_int(1000000000, 999999999999),
+            'utr' => "",
             'metadata' => ['TEST']
         ]);
 
@@ -109,11 +109,8 @@ class FlowController extends Controller
                     ->orWhere('status', 'pending');
             })->findOrFail($id);
 
-            $class_name = Str::of($payout->provider . "_" . "controller")->studly();
-            $class = __NAMESPACE__ . "\\" . $class_name;
-
             $payout->status = 'success';
-            // $payout->utr = $transaction_request['data']['utr'];
+            $payout->utr = random_int(1000000000, 999999999999);
             $payout->save();
 
             return new GeneralResource($payout);
