@@ -52,7 +52,7 @@ class FlowController extends Controller
         //     $lock->release();
         // }
 
-        $reference_id = uniqid('PAY');
+        $reference_id = uniqid('DPAY', true);
 
         TransactionController::store($request->user(), $reference_id, 'payout', "Payout initiated for {$request->account_number}", 0, $request->amount);
         $payout = Payout::create([
