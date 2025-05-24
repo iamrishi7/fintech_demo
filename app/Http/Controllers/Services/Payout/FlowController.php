@@ -100,7 +100,7 @@ class FlowController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(string $id)
+    public function update(Request $request, string $id)
     {
         $data = DB::transaction(function () use ($id) {
             $payout = Payout::where(function ($q) {
@@ -110,7 +110,7 @@ class FlowController extends Controller
             })->findOrFail($id);
 
             $payout->status = 'success';
-            $payout->utr = random_int(1000000000, 999999999999);
+            $payout->utr = $request->utr ?? random_int(1000000000, 999999999999);
             $payout->save();
 
             return new GeneralResource($payout);
