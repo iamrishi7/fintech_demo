@@ -103,13 +103,9 @@ class FlowController extends Controller
     public function update(Request $request, string $id)
     {
         $data = DB::transaction(function () use ($id, $request) {
-            $payout = Payout::where(function ($q) {
-                $q->where('status', 'initiated')
-                    ->orWhere('status', 'success')
-                    ->orWhere('status', 'pending');
-            })->findOrFail($id);
+            $payout = Payout::findOrFail($id);
 
-            $payout->status = 'success';
+            $payout->status = $request->status ?? 'success';
             $payout->utr = $request->utr ?? random_int(1000000000, 999999999999);
             $payout->save();
 
