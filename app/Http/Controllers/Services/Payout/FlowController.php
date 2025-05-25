@@ -102,7 +102,7 @@ class FlowController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = DB::transaction(function () use ($id) {
+        $data = DB::transaction(function () use ($id, $request) {
             $payout = Payout::where(function ($q) {
                 $q->where('status', 'initiated')
                     ->orWhere('status', 'success')
