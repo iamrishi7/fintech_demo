@@ -25,7 +25,8 @@ class PayoutRequest extends FormRequest
         return [
             // 'service_id' => ['required', Rule::exists('services', 'id')->where('name', 'payout')],
             'account_number' => ['required', 'digits_between:9,17', 'confirmed'],
-            'ifsc_code' => ['required', 'string', 'regex:/^[A-Za-z]{4}\d{7}$/'],
+            // 'ifsc_code' => ['required', 'string', 'regex:/^[A-Za-z]{4}\d{7}$/'],
+            'ifsc_code' => ['required', 'string'],
             'beneficiary_name' => ['required', 'string'],
             'mode' => ['required', 'in:imps,neft,rtgs,5,4,13'],
             'remarks' => ['nullable'],
